@@ -251,7 +251,8 @@ export async function login(username: string, password: string, rememberMe = fal
     // For HTTP, secure should be false. For HTTPS, secure should be true.
     // process.env.NODE_ENV === "production" is a common way to handle this.
     // If you are running local dev on HTTPS, you might need to explicitly set it to true.
-    const secureCookie = process.env.NODE_ENV === "production"; 
+    // const secureCookie = process.env.NODE_ENV === "production";
+    const secureCookie = false;
     console.log(`Login: Setting cookie with secure: ${secureCookie} (NODE_ENV: ${process.env.NODE_ENV})`);
 
     // Set cookie
