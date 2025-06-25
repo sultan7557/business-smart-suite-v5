@@ -280,12 +280,30 @@ export async function deleteProcedureCategory(categoryId: string) {
   }
 
   try {
-    // First, delete all procedures in this category
+    // Get all procedures in this category
+    const procedures = await prisma.procedure.findMany({
+      where: { categoryId },
+      select: { id: true },
+    })
+
+    const procedureIds = procedures.map(p => p.id)
+
+    // Delete all reviews for all procedures in this category
+    await prisma.procedureReview.deleteMany({
+      where: { procedureId: { in: procedureIds } },
+    })
+
+    // Delete all versions for all procedures in this category
+    await prisma.procedureVersion.deleteMany({
+      where: { procedureId: { in: procedureIds } },
+    })
+
+    // Delete all procedures in this category
     await prisma.procedure.deleteMany({
       where: { categoryId },
     })
 
-    // Then, delete the category
+    // Finally, delete the category
     await prisma.procedureCategory.delete({
       where: { id: categoryId },
     })
