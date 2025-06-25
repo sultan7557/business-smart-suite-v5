@@ -280,6 +280,12 @@ export async function deleteProcedureCategory(categoryId: string) {
   }
 
   try {
+    // First, delete all procedures in this category
+    await prisma.procedure.deleteMany({
+      where: { categoryId },
+    })
+
+    // Then, delete the category
     await prisma.procedureCategory.delete({
       where: { id: categoryId },
     })
